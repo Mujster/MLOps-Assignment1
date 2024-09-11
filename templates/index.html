@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Predict House Price</h1>
+        <form id="priceForm" method="POST" action="/predict">
+            <div class="form-group">
+                <label for="area">Area (sqft):</label>
+                <input type="number" class="form-control" id="area" name="area" required>
+            </div>
+            <div class="form-group">
+                <label for="bedrooms">Number of Bedrooms:</label>
+                <input type="number" class="form-control" id="bedrooms" name="bedrooms" required>
+            </div>
+            <div class="form-group">
+                <label for="bathrooms">Number of Bathrooms:</label>
+                <input type="number" class="form-control" id="bathrooms" name="bathrooms" required>
+            </div>
+            <div class="form-group">
+                <label for="stories">Number of Stories:</label>
+                <input type="number" class="form-control" id="stories" name="stories" required>
+            </div>
+            <div class="form-group">
+                <label for="mainroad">Main Road:</label>
+                <select class="form-control" id="mainroad" name="mainroad">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="guestroom">Guest Room:</label>
+                <select class="form-control" id="guestroom" name="guestroom">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="basement">Basement:</label>
+                <select class="form-control" id="basement" name="basement">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="hotwaterheating">Hot Water Heating:</label>
+                <select class="form-control" id="hotwaterheating" name="hotwaterheating">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="airconditioning">Air Conditioning:</label>
+                <select class="form-control" id="airconditioning" name="airconditioning">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="parking">Parking Spaces:</label>
+                <input type="number" class="form-control" id="parking" name="parking" required>
+            </div>
+            <div class="form-group">
+                <label for="prefarea">Preferred Area:</label>
+                <select class="form-control" id="prefarea" name="prefarea">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="furnishingstatus">Furnishing Status:</label>
+                <select class="form-control" id="furnishingstatus" name="furnishingstatus">
+                    <option value="furnished">Furnished</option>
+                    <option value="unfurnished">Unfurnished</option>
+                    <option value="semi-furnished">Semi-furnished</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Predict</button>
+        </form>
+
+        <h2 class="mt-5">Predicted House Price: <span id="predictedPrice"></span></h2>
+    </div>
+
+    <script>
+        document.getElementById("priceForm").onsubmit = async function(event) {
+            event.preventDefault();  // Prevent the form from submitting normally
+
+            const formData = new FormData(document.getElementById("priceForm"));
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById("predictedPrice").innerText = result.predicted_price;
+        };
+    </script>
+</body>
+</html>
