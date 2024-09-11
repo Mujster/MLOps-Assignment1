@@ -1,0 +1,6 @@
+Flask==2.1.2           # Flask for API development
+pandas==1.4.3          # For data preprocessing
+scikit-learn==1.0.2    # For machine learning model
+joblib==1.1.0          # To save and load the trained model
+unittest2==1.1.0       # For unit testing (alternatively, you can use the built-in unittest)
+gunicorn==20.1.0       # For deploying the app to production
