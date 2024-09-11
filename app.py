@@ -7,11 +7,12 @@ app = Flask(__name__)
 # Load the trained model
 model = joblib.load('linear_regression_model.pkl')
 
+# Home route to serve the frontend HTML file
 @app.route('/')
 def home():
-    # Render the frontend HTML file
     return render_template('index.html')
 
+# /predict route to handle predictions
 @app.route('/predict', methods=['POST'])
 def predict():
     # Get data from the form
@@ -26,7 +27,8 @@ def predict():
     airconditioning = 1 if request.form['airconditioning'] == 'yes' else 0
     parking = int(request.form['parking'])
     prefarea = 1 if request.form['prefarea'] == 'yes' else 0
-    furnishingstatus = 1 if request.form['furnishingstatus'] == 'furnished' else 0
+    furnishingstatus = 1 if request.form['furnishingstatus'] == 'furnished' else (
+        2 if request.form['furnishingstatus'] == 'semi-furnished' else 0)
 
     # Create input array for the model
     input_features = np.array([[area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, 
@@ -35,8 +37,8 @@ def predict():
     # Make prediction
     prediction = model.predict(input_features)
     
-    # Return prediction as JSON
-    return jsonify({'predicted_price': prediction[0]})
+    # Return prediction as JSON to the frontend
+    return jsonify({'predicted_price': round(prediction[0], 2)})
 
 if __name__ == '__main__':
     app.run(debug=True)
