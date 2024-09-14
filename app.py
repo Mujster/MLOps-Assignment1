@@ -5,7 +5,7 @@ import numpy as np
 app = Flask(__name__)
 
 # Load the trained model
-model = joblib.load('linear_regression_model.pkl')
+model = joblib.load('E:/PHAASHT/Semester 7/MLOPS/Assignment1/MLOps-Assignment1/linear_regression_model.pkl')
 
 # Home route to serve the frontend HTML file
 @app.route('/')
@@ -29,10 +29,11 @@ def predict():
     prefarea = 1 if request.form['prefarea'] == 'yes' else 0
     furnishingstatus = 1 if request.form['furnishingstatus'] == 'furnished' else (
         2 if request.form['furnishingstatus'] == 'semi-furnished' else 0)
+    building_age = int(request.form['buildingage'])
 
     # Create input array for the model
     input_features = np.array([[area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, 
-                                hotwaterheating, airconditioning, parking, prefarea, furnishingstatus]])
+                                hotwaterheating, airconditioning, parking, prefarea, furnishingstatus,building_age]])
     
     # Make prediction
     prediction = model.predict(input_features)
