@@ -4,10 +4,8 @@ import numpy as np
 
 app = Flask(__name__)
 
-# Load the trained model
-model = joblib.load('E:/PHAASHT/Semester 7/MLOPS/Assignment1/MLOps-Assignment1/linear_regression_model.pkl')
+model = joblib.load('./linear_regression_model.pkl')
 
-# Home route to serve the frontend HTML file
 @app.route('/')
 def home():
     return render_template('index.html')
