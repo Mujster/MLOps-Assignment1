@@ -1,16 +1,18 @@
 import unittest
-from app import app
+from app import app  # Import your Flask app from app.py
 import json
 
 class TestApp(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
+        self.app.testing = True
+
     def test_home_page(self):
-        tester = app.test_client(self)
-        response = tester.get('/')
+        response = self.app.get('/')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(b'<!DOCTYPE html>' in response.data) 
+        self.assertTrue(b'<!DOCTYPE html>' in response.data)
 
     def test_prediction_api(self):
-        tester = app.test_client(self)
         data = {
             'area': 100,
             'bedrooms': 2,
@@ -26,16 +28,16 @@ class TestApp(unittest.TestCase):
             'furnishingstatus': 'furnished',
             'buildingage': 10
         }
-        response = tester.post(
+        response = self.app.post(
             '/predict',
-            data=json.dumps(data),
-            content_type='application/json',
+            data=data,
             follow_redirects=True
         )
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.is_json)
-        predicted_price = json.loads(response.data)['predicted_price']
-        self.assertIsInstance(predicted_price, float)
+        response_json = json.loads(response.data)
+        self.assertIn('predicted_price', response_json)
+        self.assertIsInstance(response_json['predicted_price'], float)
 
 
 if __name__ == '__main__':
