@@ -10,7 +10,6 @@ model = joblib.load('./linear_regression_model.pkl')
 def home():
     return render_template('index.html')
 
-# /predict route to handle predictions
 @app.route('/predict', methods=['POST'])
 def predict():
     # Get data from the form
@@ -29,14 +28,11 @@ def predict():
         2 if request.form['furnishingstatus'] == 'semi-furnished' else 0)
     building_age = int(request.form['buildingage'])
 
-    # Create input array for the model
     input_features = np.array([[area, bedrooms, bathrooms, stories, mainroad, guestroom, basement, 
                                 hotwaterheating, airconditioning, parking, prefarea, furnishingstatus,building_age]])
     
-    # Make prediction
     prediction = model.predict(input_features)
-    
-    # Return prediction as JSON to the frontend
+ 
     return jsonify({'predicted_price': round(prediction[0], 2)})
 
 if __name__ == '__main__':
