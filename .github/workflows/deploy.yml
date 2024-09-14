@@ -21,9 +21,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ploomber-cloud
+          
 
       - name: Run unit tests
         run: |
+          pip install Flask
           python -m unittest discover -s . -p "test.py"
 
       - name: Deploy
